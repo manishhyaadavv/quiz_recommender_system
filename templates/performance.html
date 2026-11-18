@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Performance | QuizMaster</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f4f5fb;
+            font-family: 'Segoe UI', sans-serif;
+            color: #252944;
+        }
+
+        .navbar {
+            background: #171b35;
+            padding: 16px 7%;
+        }
+
+        .brand {
+            color: white;
+            font-size: 23px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .brand span {
+            color: #a78bfa;
+        }
+
+        .nav-link-custom {
+            color: #ddd6fe;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-link-custom:hover {
+            color: white;
+        }
+
+        .main-container {
+            max-width: 1150px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading h2 {
+            font-weight: 750;
+            font-size: 29px;
+        }
+
+        .page-heading p {
+            color: #85879b;
+            margin-top: 7px;
+        }
+
+        .back-btn {
+            background: #eae7f7;
+            color: #5945aa;
+            padding: 11px 20px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #ddd6fa;
+            color: #493394;
+        }
+
+        /* Statistics Cards */
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #eeedf5;
+            box-shadow: 0 4px 15px rgba(30,30,70,0.04);
+            height: 100%;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(30,30,70,0.08);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 23px;
+            margin-bottom: 18px;
+        }
+
+        .purple {
+            background: #eee9ff;
+        }
+
+        .blue {
+            background: #e5efff;
+        }
+
+        .green {
+            background: #e4f8ed;
+        }
+
+        .stat-card h6 {
+            color: #85879b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+            font-weight: 750;
+            color: #252944;
+            margin: 0;
+        }
+
+        .stat-note {
+            color: #999bad;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        /* History Section */
+        .history-card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid #eeedf5;
+            box-shadow: 0 4px 15px rgba(30,30,70,0.04);
+            margin-top: 35px;
+        }
+
+        .history-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .history-subtitle {
+            color: #999bad;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .table {
+            vertical-align: middle;
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: #f5f3fc;
+            color: #5945aa;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 15px;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 16px 15px;
+            font-size: 14px;
+            color: #50536c;
+            border-color: #f0eff5;
+        }
+
+        .topic-name {
+            font-weight: 650;
+            color: #292c49;
+        }
+
+        .score-badge {
+            background: #eee9ff;
+            color: #6548c7;
+            padding: 6px 12px;
+            border-radius: 7px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .percentage {
+            font-weight: 700;
+            color: #5741b8;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 15px;
+            background: #f8f7fc;
+            border-radius: 12px;
+        }
+
+        .empty-state .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h5 {
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: #85879b;
+        }
+
+        .practice-btn {
+            display: inline-block;
+            background: #7255d9;
+            color: white;
+            padding: 11px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .practice-btn:hover {
+            background: #5741b8;
+            color: white;
+        }
+
+        @media(max-width: 600px) {
+            .page-heading h2 {
+                font-size: 23px;
+            }
+
+            .history-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar d-flex justify-content-between align-items-center">
+    <a href="{{ url_for('dashboard') }}" class="brand">
+        Quiz<span>Master</span>
+    </a>
+
+    <a href="{{ url_for('dashboard') }}" class="nav-link-custom">
+        ← Dashboard
+    </a>
+</nav>
+
+
+<div class="main-container">
+
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+        <div class="page-heading">
+            <h2>My Performance 📊</h2>
+            <p>Track your learning progress and improve your quiz scores.</p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- Statistics Cards -->
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="stat-card">
+
+                <div class="stat-icon purple">📝</div>
+
+                <h6>Total Attempts</h6>
+
+                <h2>{{ stats.total_attempts or 0 }}</h2>
+
+                <p class="stat-note">Total quizzes completed</p>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="stat-card">
+
+                <div class="stat-icon blue">📈</div>
+
+                <h6>Average Score</h6>
+
+                <h2>{{ stats.average_score or 0 }}%</h2>
+
+                <p class="stat-note">Your overall average performance</p>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="stat-card">
+
+                <div class="stat-icon green">🏆</div>
+
+                <h6>Highest Score</h6>
+
+                <h2>{{ stats.highest_score or 0 }}%</h2>
+
+                <p class="stat-note">Your personal best performance</p>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Quiz History -->
+    <div class="history-card">
+
+        <h4 class="history-title">Recent Quiz Attempts</h4>
+
+        <p class="history-subtitle">
+            Review your previous quizzes and scores.
+        </p>
+
+
+        {% if attempts %}
+
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Topic</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Attempted At</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for attempt in attempts %}
+
+                    <tr>
+
+                        <td>
+                            <span class="topic-name">
+                                {{ attempt.topic_name }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="score-badge">
+                                {{ attempt.score }} / {{ attempt.total_questions }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="percentage">
+                                {{ "%.1f"|format(100 * attempt.score / attempt.total_questions) }}%
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ attempt.attempted_at }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div class="icon">📚</div>
+
+            <h5>No Quiz Attempts Yet</h5>
+
+            <p>
+                Start attempting quizzes to see your performance here.
+            </p>
+
+            <a href="{{ url_for('quizzes') }}" class="practice-btn">
+                Explore Quizzes →
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

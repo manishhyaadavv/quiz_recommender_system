@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Explore Quizzes | QuizMaster</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #f4f6fc;
+            color: #20243a;
+        }
+
+        .navbar-custom {
+            background: #171b35;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            color: white;
+            font-size: 24px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .brand span {
+            color: #8b7cff;
+        }
+
+        .back-btn {
+            color: white;
+            border: 1px solid #777b99;
+            border-radius: 9px;
+            padding: 9px 17px;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #171b35;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 55px 25px;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .page-heading p {
+            color: #85899e;
+            font-size: 14px;
+        }
+
+        .topic-card {
+            background: white;
+            border: 1px solid #eceef5;
+            border-radius: 20px;
+            padding: 28px;
+            height: 100%;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px #22264a15;
+        }
+
+        .topic-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 23px;
+        }
+
+        .python {
+            background: #e8efff;
+        }
+
+        .java {
+            background: #fff0e8;
+        }
+
+        .html {
+            background: #fff0e9;
+        }
+
+        .css {
+            background: #e8f4ff;
+        }
+
+        .javascript {
+            background: #fff8dc;
+        }
+
+        .topic-card h3 {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .topic-card p {
+            font-size: 13px;
+            color: #85899e;
+            line-height: 1.7;
+            min-height: 45px;
+        }
+
+        .topic-tag {
+            display: inline-block;
+            background: #f1efff;
+            color: #6652d9;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .start-btn {
+            display: block;
+            text-align: center;
+            background: #6250dc;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: auto;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            background: #4835c3;
+            color: white;
+        }
+
+        .bottom-message {
+            margin-top: 35px;
+            background: #eae7ff;
+            border-radius: 15px;
+            padding: 20px 25px;
+            color: #5545bc;
+            font-size: 13px;
+        }
+
+        @media(max-width: 600px) {
+            .page-heading h1 {
+                font-size: 27px;
+            }
+
+            .main-container {
+                padding: 35px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar-custom">
+
+    <a href="{{ url_for('dashboard') }}" class="brand">
+        Quiz<span>Master.</span>
+    </a>
+
+    <a href="{{ url_for('dashboard') }}" class="back-btn">
+        ← Dashboard
+    </a>
+
+</nav>
+
+
+<main class="main-container">
+
+    <div class="page-heading">
+
+        <h1>Explore Quizzes 📝</h1>
+
+        <p>
+            Choose your favourite programming topic and challenge yourself.
+            Learn, practice and improve your skills!
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        {% for topic in topics %}
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="topic-card">
+
+                {% if topic.topic_name == 'Python' %}
+
+                    <div class="topic-icon python">🐍</div>
+
+                {% elif topic.topic_name == 'Java' %}
+
+                    <div class="topic-icon java">☕</div>
+
+                {% elif topic.topic_name == 'HTML' %}
+
+                    <div class="topic-icon html">🌐</div>
+
+                {% elif topic.topic_name == 'CSS' %}
+
+                    <div class="topic-icon css">🎨</div>
+
+                {% elif topic.topic_name == 'JavaScript' %}
+
+                    <div class="topic-icon javascript">⚡</div>
+
+                {% else %}
+
+                    <div class="topic-icon python">📚</div>
+
+                {% endif %}
+
+
+                <span class="topic-tag">Programming</span>
+
+                <h3>{{ topic.topic_name }}</h3>
+
+                <p>{{ topic.description }}</p>
+
+                <a href="{{ url_for('take_quiz', topic_id=topic.id) }}"
+                   class="start-btn">
+                    Start Quiz →
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <div class="bottom-message">
+        💡 <strong>Learning Tip:</strong>
+        Practice regularly and review your performance to improve your knowledge.
+    </div>
+
+</main>
+
+</body>
+</html>

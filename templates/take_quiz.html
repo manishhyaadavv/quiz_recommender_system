@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ topic.topic_name }} Quiz | QuizMaster</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f4f5fb;
+            font-family: 'Segoe UI', sans-serif;
+            color: #252944;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #171b35;
+            padding: 16px 7%;
+        }
+
+        .brand {
+            color: white;
+            font-size: 23px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .brand span {
+            color: #a78bfa;
+        }
+
+        .back-link {
+            color: #ddd6fe;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Quiz Header */
+        .quiz-header {
+            background: linear-gradient(120deg, #292c59, #6551c9);
+            padding: 35px;
+            border-radius: 18px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(60, 50, 130, 0.15);
+        }
+
+        .quiz-header h1 {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .quiz-header p {
+            color: #e4e0ff;
+            margin-bottom: 0;
+        }
+
+        .quiz-label {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+            border: 1px solid #e9e8f2;
+            box-shadow: 0 4px 15px rgba(30, 30, 70, 0.04);
+            transition: 0.2s;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 7px 20px rgba(30, 30, 70, 0.08);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #eee9ff;
+            color: #6548c7;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .question-card h5 {
+            font-size: 17px;
+            font-weight: 650;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Options */
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 15px;
+            margin-top: 10px;
+            border: 1px solid #e7e6ef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #444761;
+        }
+
+        .option-label:hover {
+            border-color: #9278ed;
+            background: #f8f6ff;
+        }
+
+        .option-label input {
+            accent-color: #7355d9;
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+        }
+
+        .option-label:has(input:checked) {
+            background: #f0ecff;
+            border-color: #8065e5;
+            color: #5135b5;
+        }
+
+        /* Buttons */
+        .submit-btn {
+            background: linear-gradient(120deg, #7255d9, #5741b8);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(90, 65, 190, 0.25);
+            color: white;
+        }
+
+        .secondary-btn {
+            background: #eae7f7;
+            color: #5945aa;
+            padding: 12px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .secondary-btn:hover {
+            background: #ddd6fa;
+            color: #493394;
+        }
+
+        /* Result */
+        .result-card {
+            background: #e8f8ef;
+            border: 1px solid #b9e8cb;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .result-card h3 {
+            color: #187744;
+            font-weight: 700;
+        }
+
+        .score-text {
+            font-size: 27px;
+            font-weight: 700;
+            color: #176b3d;
+            margin-top: 10px;
+        }
+
+        .empty-message {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        @media(max-width: 600px) {
+            .quiz-header {
+                padding: 25px;
+            }
+
+            .quiz-header h1 {
+                font-size: 24px;
+            }
+
+            .question-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar d-flex justify-content-between align-items-center">
+    <a href="{{ url_for('dashboard') }}" class="brand">
+        Quiz<span>Master</span>
+    </a>
+
+    <a href="{{ url_for('quizzes') }}" class="back-link">
+        ← Back to Quizzes
+    </a>
+</nav>
+
+
+<div class="main-container">
+
+    <!-- Quiz Header -->
+    <div class="quiz-header">
+        <span class="quiz-label">QUIZ PRACTICE</span>
+
+        <h1>{{ topic.topic_name }} Quiz</h1>
+
+        <p>
+            Test your knowledge and improve your skills.
+            Select the correct answer for every question.
+        </p>
+
+        <div class="mt-3">
+            <strong>{{ questions|length }} Questions</strong>
+            <span class="mx-2">•</span>
+            <strong>Multiple Choice</strong>
+        </div>
+    </div>
+
+
+    <!-- Quiz Result -->
+    {% if score is not none %}
+    <div class="result-card">
+        <h3>🎉 Quiz Completed!</h3>
+
+        <p class="mt-2 mb-1">
+            Great job! Here is your quiz result.
+        </p>
+
+        <div class="score-text">
+            {{ score }} / {{ questions|length }}
+        </div>
+
+        <p class="text-success mb-0">
+            Your score has been saved successfully.
+        </p>
+    </div>
+    {% endif %}
+
+
+<!-- Questions -->
+{% if questions %}
+
+    {% if score is none %}
+
+    <form method="POST">
+
+        {% for q in questions %}
+
+        <div class="question-card">
+
+            <span class="question-number">
+                QUESTION {{ loop.index }}
+            </span>
+
+            <h5>{{ q.question_text }}</h5>
+
+            {% for option, label in [
+                ('A', q.option_a),
+                ('B', q.option_b),
+                ('C', q.option_c),
+                ('D', q.option_d)
+            ] %}
+
+                {% if label %}
+
+                <label class="option-label">
+
+                    <input
+                        type="radio"
+                        name="{{ q.id }}"
+                        value="{{ option }}"
+                        required
+                    >
+
+                    <span>
+                        <strong>{{ option }}.</strong>
+                        {{ label }}
+                    </span>
+
+                </label>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+        {% endfor %}
+
+        <div class="text-center mt-4 mb-5">
+            <button type="submit" class="submit-btn">
+                Submit Quiz →
+            </button>
+        </div>
+
+    </form>
+
+    {% endif %}
+
+{% else %}
+
+    <div class="empty-message">
+        <h5>No Questions Available</h5>
+        <p class="text-muted mb-0">
+            There are currently no questions for this topic.
+        </p>
+    </div>
+
+{% endif %}
+
+
+    <!-- Back Button -->
+    <div class="text-center mb-5">
+        <a href="{{ url_for('quizzes') }}" class="secondary-btn">
+            ← Back to All Quizzes
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>
