@@ -1,5 +1,0 @@
-streamlit
-pypdf
-scikit-learn
-mysql-connector-python
-reportlab
